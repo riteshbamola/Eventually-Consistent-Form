@@ -49,6 +49,7 @@ Each request follows this lifecycle:
 ```
 
 ### Explanation
+```
 
 * **pending → processing**
 
@@ -69,6 +70,7 @@ Each request follows this lifecycle:
 ```
 
 ### States
+```
 
 * **pending**
 
@@ -86,10 +88,10 @@ Each request follows this lifecycle:
 * **failed (terminal)**
 
   * All retry attempts exhausted
-
----
+```
 
 ## Retry Logic
+```
 
 The system automatically retries **temporary failures (503-like scenarios)**.
 
@@ -121,11 +123,10 @@ On failure:
 3. If limit reached:
 
    * Job is marked as `failed`
-
----
+```
 
 ## Duplicate Prevention (Idempotency)
-
+```
 ### Problem
 
 Users may:
