@@ -60,18 +60,20 @@ const processRequest = async (jobid: string, attempt:number): Promise<void> =>{
             job.status="failed";
             jobs.set(jobid,job);
         }
-        console.log(`Failed To Process: [${jobid}]`);
+        console.log(`Failed: [${jobid}]`);
         return;
     }
 
     if(outcome == "delayed"){
-        console.log(`Delayed Request : [${jobid}]`);
+        console.log(`Delayed : [${jobid}]`);
         const delay = Math.floor(Math.random() * 5000) + 5000;
         await wait(delay);
+
     }
 
     job.status = "success"
     jobs.set(jobid, job);
+    console.log(`Success: [${jobid}]`);
 }
 
 const startWorker = ()=>{
@@ -93,6 +95,7 @@ const startWorker = ()=>{
 export const pushJob = (key:string, email:string, amount:number):Job =>{
 
     if(jobs.has(key)){
+        console.log(`Duplicate Found : [${key}]`);
         return jobs.get(key)!;
     }
 
