@@ -19,7 +19,6 @@ export const handleForm = async (req:Request,res:Response) =>{
 }
 
 export const handleStatus = async(req:Request,res:Response) =>{
-    console.log("Hit Status");
     const id = req.params.id as string;
     
     if (!id) {

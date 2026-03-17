@@ -26,9 +26,9 @@ const queue:RetryQueue[]=[];
 
 const getRandomResponse = () =>{
     const randomNumber = Math.random() * 10;
-    if(randomNumber < 4) return 'success';
-    if(randomNumber >=4 && randomNumber < 7) return "delayed";
-    return "failure";
+    if(randomNumber < 4) return 'failure';
+    if(randomNumber >= 4 && randomNumber < 7) return "delayed";
+    return "success";
 }
 
 const getDelay = (attempt:number) =>{

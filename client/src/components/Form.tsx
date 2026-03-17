@@ -10,6 +10,7 @@ export default function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const newId = crypto.randomUUID();
     setJobId(newId);
     setStatus("pending");
@@ -27,35 +28,74 @@ export default function App() {
 
   useEffect(() => {
     if (!jobId || status !== "pending") return;
+
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/form/status/${jobId}`);
+        const res = await fetch(
+          `http://localhost:3000/api/form/status/${jobId}`
+        );
         const data = await res.json();
-        if (data.status === "success" || data.status === "failed") setStatus(data.status);
+
+        if (data.status === "success" || data.status === "failed") {
+          setStatus(data.status);
+        }
       } catch (err) {
         setStatus("failed");
       }
     }, 1000);
+
     return () => clearInterval(interval);
   }, [jobId, status]);
 
   return (
     <div style={styles.container}>
-      <h2 style={{ marginBottom: "20px" }}> Form</h2>
+      <h2 style={{ marginBottom: "20px" }}>Form</h2>
+
       <form onSubmit={handleSubmit} style={styles.form}>
-        <input style={styles.input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required disabled={status === "pending"} />
-        <input style={styles.input} type="number" value={amount} onChange={(e) => setAmount(Number(e.target.value))} placeholder="Amount" required disabled={status === "pending"} />
-        <button style={{ ...styles.button, opacity: status === "pending" ? 0.6 : 1 }} type="submit" disabled={status === "pending"}>
-          {status === "pending" ? "Processing..." : "Pay Now"}
+        <input
+          style={styles.input}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+          disabled={status === "pending"}
+        />
+
+        <input
+          style={styles.input}
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          placeholder="Amount"
+          required
+          disabled={status === "pending"}
+        />
+
+        <button
+          style={{
+            ...styles.button,
+            opacity: status === "pending" ? 0.6 : 1,
+          }}
+          type="submit"
+          disabled={status === "pending"}
+        >
+          {status === "pending" ? "Processing..." : "Submit"}
         </button>
       </form>
 
-     
+      {/* STATUS BOX */}
       {status !== "idle" && (
         <div style={{ ...styles.statusBox, ...statusTheme[status] }}>
-          {status === "pending" && <span>⏳ <b>Status:</b> Transaction is processing...</span>}
-          {status === "success" && <span>✅ <b>Status:</b> Request Successful!</span>}
-          {status === "failed" && <span>❌ <b>Status:</b> Request Failed. Please try again.</span>}
+          {status === "pending" && (
+            <span>⏳ <b>Status:</b> Pending...</span>
+          )}
+          {status === "success" && (
+            <span>✅ <b>Status:</b> Success</span>
+          )}
+          {status === "failed" && (
+            <span>❌ <b>Status:</b> Failed</span>
+          )}
         </div>
       )}
     </div>
@@ -63,16 +103,57 @@ export default function App() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  container: { maxWidth: "350px", margin: "40px auto", padding: "24px", borderRadius: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", fontFamily: "system-ui, sans-serif" },
-  form: { display: "flex", flexDirection: "column", gap: "12px" },
-  input: { padding: "12px", borderRadius: "6px", border: "1px solid #ddd", fontSize: "16px" },
-  button: { padding: "12px", borderRadius: "6px", border: "none", backgroundColor: "#007bff", color: "white", fontWeight: "bold", cursor: "pointer" },
-  statusBox: { marginTop: "20px", padding: "12px", borderRadius: "8px", fontSize: "14px", textAlign: "left" as const },
+  container: {
+    maxWidth: "350px",
+    margin: "40px auto",
+    padding: "24px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    fontFamily: "system-ui, sans-serif",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px",
+  },
+  input: {
+    padding: "12px",
+    borderRadius: "6px",
+    border: "1px solid #ddd",
+    fontSize: "16px",
+  },
+  button: {
+    padding: "12px",
+    borderRadius: "6px",
+    border: "none",
+    backgroundColor: "#007bff",
+    color: "white",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  statusBox: {
+    marginTop: "20px",
+    padding: "12px",
+    borderRadius: "8px",
+    fontSize: "14px",
+  },
 };
 
 const statusTheme = {
-  pending: { backgroundColor: "#fff3cd", color: "#856404", border: "1px solid #ffeeba" },
-  success: { backgroundColor: "#d4edda", color: "#155724", border: "1px solid #c3e6cb" },
-  failed: { backgroundColor: "#f8d7da", color: "#721c24", border: "1px solid #f5c6cb" },
+  pending: {
+    backgroundColor: "#fff3cd",
+    color: "#856404",
+    border: "1px solid #ffeeba",
+  },
+  success: {
+    backgroundColor: "#d4edda",
+    color: "#155724",
+    border: "1px solid #c3e6cb",
+  },
+  failed: {
+    backgroundColor: "#f8d7da",
+    color: "#721c24",
+    border: "1px solid #f5c6cb",
+  },
   idle: {},
 };
