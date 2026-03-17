@@ -113,7 +113,7 @@ export const pushJob = (key:string, email:string, amount:number):Job =>{
 
 }
 
-export const getJobStatus = (jobId: string): Job | null => {
+export const getJobStatus =  (jobId: string): Job | null => {
     return jobs.get(jobId) ?? null
 }
 startWorker()
